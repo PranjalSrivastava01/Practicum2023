@@ -15,30 +15,31 @@ const LoginPage = ({navigation}) => {
   const [phoneNo, setPhoneNo] = useState('');
   const [name, setName] = useState('');
 
-  const createUser=()=>{
-    auth()
-  .signInWithEmailAndPassword(name, phoneNo)
-  .then(() => {
-    const routes = navigation.getState()?.routes
-    navigation.replace(routes[routes.length - 2]?.name == "LoginPage" ? "BottomNavigator" : 'SelectProfile' , {user: route?.params.user});
-  })
-  .catch(error => {
-    if (error.code === 'auth/user-not-found') {
-      navigation.navigate('SignUp'); 
-       Alert.alert('User Account not found please sign-up')
-      console.log('That email address is already in use!');
+  const createUser = async () => {
+    try {
+      await auth()
+      .signInWithEmailAndPassword(name, phoneNo)
+      .then(() => {
+        const routes = navigation.getState()?.routes
+        navigation.replace(routes[routes.length - 1]?.name == "LoginPage" ? "BottomNavigator" : 'HomeScreen' , {user: route?.params.user});
+      });
     }
-  if(error.code='auth/wrong-password')
-  {
-    Alert.alert('The password is invalid or the user does not have a password')
-  }
-    if (error.code === 'auth/invalid-email') {
-      Alert.alert('please enter valid credential')
-      console.log('That email address is invalid!');
-    }
+    catch(error) {
+      if (error.code === 'auth/user-not-found') {
+        navigation.navigate('SignUp'); 
+        Alert.alert('User Account not found please sign-up')
+        console.log('That email address is already in use!');
+      }
+      if(error.code='auth/wrong-password') {
+        Alert.alert('The password is invalid or the user does not have a password')
+      }
+      if (error.code === 'auth/invalid-email') {
+        Alert.alert('please enter valid credential')
+        console.log('That email address is invalid!');
+      }
 
-    console.error(error);
-  });
+      console.error(error);
+    }
   }
   
   return (

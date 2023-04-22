@@ -16,13 +16,11 @@ import {useRoute} from '@react-navigation/native';
 
 export default function SelectProfile({navigation}) {
   const {height, width} = useWindowDimensions();
-  const [isBuyer, setIsBuyer] = useState(null);
+  const [isBuyer, setIsBuyer] = useState(0);
   const route = useRoute();
   const handleSubmission = () => {
     if (isBuyer != null) {
-      navigation.navigate('AddressSc', {
-        user: {...route.params.user, isBuyer: isBuyer},
-      });
+      navigation.navigate('AddressSc', {isBuyer: isBuyer, name: route?.params.name});
     } else {
       ToastAndroid.show('Select Profile', ToastAndroid.BOTTOM);
     }

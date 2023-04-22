@@ -3,9 +3,25 @@ import {TextInput} from 'react-native-gesture-handler';
 import {Avatar, Button, Card, Text, View,Provider} from 'react-native-paper';
 import {BackHandler, ScrollView, StyleSheet} from 'react-native';
 import Theme from '../assests/Theme/theme1'
-const LeftContent = props => <Avatar.Icon {...props} icon="folder" />;
+import {useState} from 'react';
+const LeftContent = props => <Avatar.Icon {...props} icon='folder' />;
+import CustomItem from '../Component/CustomItem';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 export default function MyComponent() {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const [blog, setBlog] = useState('');
+
+  const updateBlog = (text) => {
+    setBlog(text);
+  }
+
+  const updatePage = () => {
+    route?.params.upd(blog);
+    navigation.goBack();
+  }
+
   return (
     <Provider theme={Theme}>
     <Card style={styles.container}>
@@ -18,13 +34,13 @@ export default function MyComponent() {
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps={'always'}>
         <TextInput
-          placeholder=" What's Happening!!"
+          placeholder="What's Happening!!"
           autoFocus={true}
-          style={styles.tweetArea}></TextInput>
+          style={styles.tweetArea} onChangeText={updateBlog}></TextInput>
       </ScrollView>
       <Card.Actions>
-        <Button>Cancel</Button>
-        <Button>Post</Button>
+        <Button onPress={() => navigation.goBack()}>Cancel</Button>
+        <Button onPress={updatePage}>Post</Button>
       </Card.Actions>
     </Card>
     </Provider>

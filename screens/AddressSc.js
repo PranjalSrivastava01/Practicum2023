@@ -1,5 +1,4 @@
-import {useRoute} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -8,15 +7,58 @@ import {
   TouchableOpacity,
   ToastAndroid,
 } from 'react-native';
+import firestore, { firebase } from '@react-native-firebase/firestore';
+import { database } from 'firebase-functions/v1/firestore';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
-const SignUpPage = ({navigation}) => {
+const SignUpPage = () => {
   const [addLine1, setAddLine1] = useState('');
   const [addLine2, setAddLine2] = useState('');
   const [city, setCity] = useState('');
   const [pincode, setPincode] = useState('');
   const [state, setState] = useState('');
 
+  useEffect(() => {
+    getDatabase();
+  }, []);
+
+  const navigation = useNavigation();
   const route = useRoute();
+
+  const getDatabase = async () => {
+    try {
+      const user = await firebase.auth().currentUser.uid;
+      const data = await firestore().collection('User1').doc(user).get();
+
+      console.log(data._data);
+    }
+    catch(err) {
+      console.log(err);
+    }
+  }
+
+  const handleAddData = async () => {
+    try {
+      const user = await firebase.auth().currentUser.uid;
+      await firestore().collection('User1').doc(user).set({
+        address1: addLine1,
+        address2: addLine2,
+        cityName: city,
+        pinCode: pincode,
+        stateName: state,
+        userType: (route?.params.isBuyer==1)?"Buyer":"Seller",
+        name: route?.params.name,
+      }).then(() =>{console.log('data added')});
+
+      console.log(user);
+      navigation.navigate('BottomNavigator');
+    }
+    catch(err) {
+      console.log(err);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Address Details-</Text>
@@ -76,7 +118,7 @@ const SignUpPage = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View style={styles.boxstyle}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleAddData}>
             <Text style={styles.buttonTitle}>Save</Text>
           </TouchableOpacity>
         </View>

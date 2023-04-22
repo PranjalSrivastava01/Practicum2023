@@ -1,8 +1,9 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import StoryBox from '../Component/StoryBox';
+import MyComponent from './AddStoryPage';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {ScrollView} from 'react-native-gesture-handler';
+import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import {AnimatedFAB, FAB, Portal, TextInput} from 'react-native-paper';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
@@ -10,6 +11,7 @@ export default function HomeScreen() {
   const navigation = useNavigation();
 
   const [extended, setExtended] = useState(true);
+  const [blogList, setBlogList] = useState([]);
 
   const onScroll = ({nativeEvent}) => {
     const currentScrollPosition =
@@ -18,19 +20,25 @@ export default function HomeScreen() {
     setExtended(currentScrollPosition <= 0);
   };
   const route = useRoute();
+
+  const updateList = (blogItem) => {
+    setBlogList([...blogList, {text: blogItem, key: (blogList.length+1)}]);
+    console.log(blogList);
+  }
+
   const handleClick = () => {
-    navigation.navigate('AddStoryPage');
+    navigation.navigate('AddStoryPage', {upd: updateList});
   };
+
+  // console.log(route?.params)
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView onScroll={onScroll}>
-        <StoryBox></StoryBox>
-        <StoryBox></StoryBox>
-        <StoryBox></StoryBox>
-        <StoryBox></StoryBox>
-        <StoryBox></StoryBox>
-        <StoryBox></StoryBox>
-      </ScrollView>
+      <FlatList 
+        data={blogList}
+        renderItem={(blog1) => {
+          return <StoryBox blog={blog1.item.text} />
+        }} 
+      />
       <AnimatedFAB
         color="white"
         icon={'plus'}

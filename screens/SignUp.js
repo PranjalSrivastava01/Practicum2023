@@ -12,33 +12,36 @@ import auth from '@react-native-firebase/auth';
 
 const SignUpPage = ({navigation}) => {
   const [name, setName] = useState('');
-  const [phoneNo, setPhoneNo] = useState('');
-  const createUser=()=>{
-    auth()
-  .createUserWithEmailAndPassword(name, phoneNo)
-  .then(() => {
-    console.log('User account created & signed in!');
-  })
-  .catch(error => {
-    if (error.code === 'auth/email-already-in-use') {
-      console.log('That email address is already in use!');
-    }
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    if (error.code === 'auth/invalid-email') {
-      console.log('That email address is invalid!');
+  const createUser = async () => {
+    try {
+      await auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {console.log('User account created & signed in!');});
+      
+      navigation.navigate('SelectProfile', {name: name});
     }
+    catch(error) {
+      if (error.code === 'auth/email-already-in-use') {
+        console.log('That email address is already in use!');
+      }
 
-    console.error(error);
-  });
+      if (error.code === 'auth/invalid-email') {
+        console.log('That email address is invalid!');
+      }
+      console.error(error);
+    }
   }
+
   const handleSignUp = () => {
-    if (!name) {
+    if (!email) {
       ToastAndroid.show('Please Enter your email', ToastAndroid.BOTTOM);
-    } else if (!phoneNo) {
+    } else if (!password) {
       ToastAndroid.show('Please Enter Password', ToastAndroid.BOTTOM);
     } else {
       createUser();
-      navigation.navigate('OtpScreen', {user: {name, phoneNo}});
     }
     // Write your sign-up logic here
   };
@@ -48,7 +51,7 @@ const SignUpPage = ({navigation}) => {
       <Text style={styles.title}>Create an Account</Text>
       <TextInput
         style={styles.input}
-        placeholder="E-mail"
+        placeholder="Name"
         placeholderTextColor="#AAAAAA"
         onChangeText={text => setName(text)}
         value={name}
@@ -57,10 +60,19 @@ const SignUpPage = ({navigation}) => {
       />
       <TextInput
         style={styles.input}
+        placeholder="E-mail"
+        placeholderTextColor="#AAAAAA"
+        onChangeText={text => setEmail(text)}
+        value={email}
+        autoCapitalize="words"
+        autoCorrect={false}
+      />
+      <TextInput
+        style={styles.input}
         placeholder="Password"
         placeholderTextColor="#AAAAAA"
-        onChangeText={text => setPhoneNo(text)}
-        value={phoneNo}
+        onChangeText={text => setPassword(text)}
+        value={password}
         maxLength={10}
         keyboardType="number-pad"
         autoCapitalize="none"
