@@ -26,7 +26,7 @@ export default function MyComponent() {
     <Provider theme={Theme}>
     <Card style={styles.container}>
       <Card.Title
-        title="Siddhant Keshari"
+        title={route?.params.name}
         variant="titleLarge"
         left={LeftContent}
       />

@@ -14,7 +14,7 @@ export default function StoryBox(props) {
         theme={{colors: {outline: 'black'}, roundness: 0}}
         style={{borderBottomColor: 'black', borderBottomWidth: 0.2}}>
         <Card.Title
-          title="Saint Paul"
+          title={props.name}
           //   subtitle="Card Subtitle"
           left={LeftContent}
         />

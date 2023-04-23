@@ -2,9 +2,40 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Avatar} from 'react-native-paper';
+import firestore, { firebase } from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const UserProfile = () => {
   const navigation = useNavigation();
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    getDatabase();
+  }, []);
+
+  const getDatabase = async () => {
+    try {
+      const user = await firebase.auth().currentUser;
+      const data = await firestore().collection('User1').doc(user.uid).get();
+      setName(data._data.name);
+      setEmail(user.email)
+    }
+    catch(err) {
+      console.log(err);
+    }
+  }
+
+  const signOut = async () => {
+    try {
+      await auth().signOut().then(() => console.log('User signed out!'));
+      navigation.replace('LoginPage');
+    }
+    catch(err) {
+      console.log(err)
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -20,10 +51,9 @@ const UserProfile = () => {
         />
         <Text style={styles.heading}>User Profile Details</Text>
         <View style={{gap: 10,marginVertical:40}}>
-          <Text style={styles.TextArea}>Name: Siddhant Keshari</Text>
-          <Text style={styles.TextArea}>Phone Number: +91 8922915545</Text>
+          <Text style={styles.TextArea}>Name: {name}</Text>
           <Text style={styles.TextArea}>
-            Email: siddhantkeshari76@gmail.com
+            Email: {email}
           </Text>
         </View>
       </View>
@@ -32,7 +62,7 @@ const UserProfile = () => {
         onPress={() => navigation.navigate('CropStock')}>
         <Text style={styles.buttonText}>Buyer/Seller</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={signOut}>
         <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>
     </View>
