@@ -24,13 +24,13 @@ const CheckoutScreen = () => {
       <Appbar.Action icon="dots-vertical" onPress={_handleMore} /> */}
       </Appbar.Header>
       <View>
-        <ScrollView backgroundColor='#EFFFF8'>
+        {/* <ScrollView backgroundColor='#EFFFF8'>
           <MarketComponent></MarketComponent>
           <MarketComponent></MarketComponent>
           <MarketComponent></MarketComponent>
           <MarketComponent></MarketComponent>
           <MarketComponent></MarketComponent>
-        </ScrollView>
+        </ScrollView> */}
         {/* <Provider theme={Theme}> */}
         <View style={styles.cardStyle}>
           <Provider theme={Theme}>

@@ -1,18 +1,51 @@
 import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {TouchableRipple, IconButton, MD3Colors, Text} from 'react-native-paper';
+import auth from '@react-native-firebase/auth';
+import firestore, { firebase } from '@react-native-firebase/firestore';
 
-const CustomItem = () => {
+const CustomItem = (props) => {
   const [Counter, setCounter] = useState(0);
+  // const [cropList, setCropList] = useState([]);
   const handleOnIncrement = () => {
+    console.log(props.obj.cropname);
     setCounter(Counter + 1);
   };
-  console.log(Counter);
+  // console.log(Counter);
   const handleOnDecrement = () => {
     if (Counter > 0) {
       setCounter(Counter - 1);
     }
   };
+
+  // useEffect(() => {
+  //   getDatabase();
+  // }, []);
+
+  // const getDatabase = async () => {
+  //   try {
+  //     const data = await firestore().collection('UsersList').doc('1').get();
+  //     let arr = data._data.users;
+  //     let arr1 = [];
+  //     for(let i=0; i<arr.length; i++) {
+  //       // console.log(arr[i]);
+  //       const data1 = await firestore().collection('UserCrops').doc(arr[i]).get();
+  //       if(data1) {
+  //         console.log(data1);
+  //       }
+  //       // let arr2 = data1._data.crops;
+  //       // for(let j=0; j<arr2.length; j++) {
+  //       //   arr1.push(arr2[j]);
+  //       // }
+  //     }
+      
+  //     setCropList(arr1);
+  //     // console.log(arr1);
+  //   }
+  //   catch(err) {
+  //     console.log(err);
+  //   }
+  // }
 
   return (
     <View style={styles.outerStyle}>
@@ -23,18 +56,18 @@ const CustomItem = () => {
       />
       <View style={styles.ContactDetails}>
         <View style={{gap: 5, fontSize: 20}}>
-          <Text style={{fontSize: 13, fontWeight: 'bold'}}> Crop: Wheat</Text>
+          <Text style={{fontSize: 13, fontWeight: 'bold'}}> Crop: {props.obj.cropname}</Text>
           <Text style={{fontSize: 13, fontWeight: 'bold'}}>
             {' '}
-            Name: Siddhant Keshari
+            Name: {props.obj.name}
           </Text>
           <Text style={{fontSize: 13, fontWeight: 'bold'}}>
             {' '}
-            Phone Number: +91 8922915545
+            Phone Number: +91 {props.obj.phoneno}
           </Text>
           <Text style={{fontSize: 13, fontWeight: 'bold'}}>
             {' '}
-            Price Per 10KG: ₹400
+            Price Per KG: ₹{props.obj.price}
           </Text>
         </View>
         <View style={styles.btn}>

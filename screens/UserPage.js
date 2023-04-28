@@ -10,6 +10,7 @@ const UserProfile = () => {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phoneno, setPhoneNo] = useState('');
 
   useEffect(() => {
     getDatabase();
@@ -20,6 +21,7 @@ const UserProfile = () => {
       const user = await firebase.auth().currentUser;
       const data = await firestore().collection('User1').doc(user.uid).get();
       setName(data._data.name);
+      setPhoneNo(data._data.phoneno);
       setEmail(user.email)
     }
     catch(err) {
@@ -52,15 +54,14 @@ const UserProfile = () => {
         <Text style={styles.heading}>User Profile Details</Text>
         <View style={{gap: 10,marginVertical:40}}>
           <Text style={styles.TextArea}>Name: {name}</Text>
-          <Text style={styles.TextArea}>
-            Email: {email}
-          </Text>
+          <Text style={styles.TextArea}>Phone No: +91 {phoneno}</Text>
+          <Text style={styles.TextArea}>Email: {email}</Text>
         </View>
       </View>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('CropStock')}>
-        <Text style={styles.buttonText}>Buyer/Seller</Text>
+        onPress={() => navigation.navigate('CropSellReq')}>
+        <Text style={styles.buttonText}>Seller</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={signOut}>
         <Text style={styles.buttonText}>Logout</Text>

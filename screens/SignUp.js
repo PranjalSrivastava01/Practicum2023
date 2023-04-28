@@ -14,6 +14,7 @@ const SignUpPage = ({navigation}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phoneNo, setPhoneNo] = useState('');
 
   const createUser = async () => {
     try {
@@ -21,7 +22,7 @@ const SignUpPage = ({navigation}) => {
       .createUserWithEmailAndPassword(email, password)
       .then(() => {console.log('User account created & signed in!');});
       
-      navigation.navigate('SelectProfile', {name: name});
+      navigation.navigate('SelectProfile', {name: name, phoneno: phoneNo});
     }
     catch(error) {
       if (error.code === 'auth/email-already-in-use') {
@@ -69,11 +70,21 @@ const SignUpPage = ({navigation}) => {
       />
       <TextInput
         style={styles.input}
+        placeholder="Phone No."
+        placeholderTextColor="#AAAAAA"
+        onChangeText={text => setPhoneNo(text)}
+        value={phoneNo}
+        maxLength={10}
+        keyboardType="number-pad"
+        autoCapitalize="none"
+        autoCorrect={false}
+      />
+      <TextInput
+        style={styles.input}
         placeholder="Password"
         placeholderTextColor="#AAAAAA"
         onChangeText={text => setPassword(text)}
         value={password}
-        maxLength={10}
         keyboardType="number-pad"
         autoCapitalize="none"
         autoCorrect={false}

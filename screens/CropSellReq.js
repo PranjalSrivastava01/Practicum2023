@@ -6,25 +6,43 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import firestore, { firebase } from '@react-native-firebase/firestore';
 
 const CropSellReq = ({navigation}) => {
-  const [Cropname, setCropName] = useState('');
+  const [cropname, setCropName] = useState('');
   const [weight, setWeight] = useState('');
+  const [price, setPrice] = useState('');
 
-  const handleSubmission = () => {
-    navigation.navigate('CropStock');
-    // Write your sign-up logic here
-  };
+  const addCrop = async () => {
+    try {
+      const user = await firebase.auth().currentUser;
+      // const data = await firestore().collection('UserCrops').doc(user.uid).get();
+      // if(!data._data) {
+      //   await firestore().collection('UserCrops').doc(user.uid).set({crops: []});
+      // }
+
+      await firestore().collection('User1').doc(user.uid)
+      .update({crops: firestore.FieldValue.arrayUnion({cropname: cropname, weight: weight, price: price})})
+      .then(()=> {console.log('data added')});
+
+      console.log(user.uid);
+
+      navigation.goBack();
+    }
+    catch(err) {
+      console.log(err);
+    }
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Add Crop for Selling!</Text>
       <TextInput
-        style={styles.input}
+        style={styles.input} 
         placeholder="Crop Name"
         placeholderTextColor="#AAAAAA"
         onChangeText={text => setCropName(text)}
-        value={Cropname}
+        value={cropname}
         autoCapitalize="words"
         autoCorrect={false}
       />
@@ -38,7 +56,17 @@ const CropSellReq = ({navigation}) => {
         autoCapitalize="none"
         autoCorrect={false}
       />
-      <TouchableOpacity style={styles.button} onPress={handleSubmission}>
+      <TextInput
+        style={styles.input}
+        placeholder="Price per kg"
+        placeholderTextColor="#AAAAAA"
+        onChangeText={text => setPrice(text)}
+        value={price}
+        keyboardType="numeric"
+        autoCapitalize="none"
+        autoCorrect={false}
+      />
+      <TouchableOpacity style={styles.button} onPress={addCrop}>
         <Text style={styles.buttonTitle}>Submit</Text>
       </TouchableOpacity>
     </View>

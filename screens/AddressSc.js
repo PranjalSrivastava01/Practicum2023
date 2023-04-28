@@ -49,6 +49,7 @@ const SignUpPage = () => {
         stateName: state,
         userType: (route?.params.isBuyer==1)?"Buyer":"Seller",
         name: route?.params.name,
+        phoneno: route?.params.phoneno,
       }).then(() =>{console.log('data added')});
 
       console.log(user);

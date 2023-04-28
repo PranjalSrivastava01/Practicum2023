@@ -20,7 +20,7 @@ export default function SelectProfile({navigation}) {
   const route = useRoute();
   const handleSubmission = () => {
     if (isBuyer != null) {
-      navigation.navigate('AddressSc', {isBuyer: isBuyer, name: route?.params.name});
+      navigation.navigate('AddressSc', {isBuyer: isBuyer, name: route?.params.name, phoneno: route?.params.phoneno});
     } else {
       ToastAndroid.show('Select Profile', ToastAndroid.BOTTOM);
     }
