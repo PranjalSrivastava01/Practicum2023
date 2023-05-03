@@ -18,40 +18,21 @@ const CustomItem = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   getDatabase();
-  // }, []);
+  
 
-  // const getDatabase = async () => {
-  //   try {
-  //     const data = await firestore().collection('UsersList').doc('1').get();
-  //     let arr = data._data.users;
-  //     let arr1 = [];
-  //     for(let i=0; i<arr.length; i++) {
-  //       // console.log(arr[i]);
-  //       const data1 = await firestore().collection('UserCrops').doc(arr[i]).get();
-  //       if(data1) {
-  //         console.log(data1);
-  //       }
-  //       // let arr2 = data1._data.crops;
-  //       // for(let j=0; j<arr2.length; j++) {
-  //       //   arr1.push(arr2[j]);
-  //       // }
-  //     }
-      
-  //     setCropList(arr1);
-  //     // console.log(arr1);
-  //   }
-  //   catch(err) {
-  //     console.log(err);
-  //   }
-  // }
+  const cropsList = {
+    Wheat: require('../assests/crops/Wheat.jpg'),
+    Rice: require('../assests/crops/Rice.jpg'),
+    Bajra: require('../assests/crops/Bajra.jpg'),
+    Corn: require('../assests/crops/Corn.jpg'),
+    Potato: require('../assests/crops/Potato.jpg')
+  }
 
   return (
     <View style={styles.outerStyle}>
     <View style={styles.container}>
       <Image
-        source={require('../assests/Image/crop.jpg')}
+        source={cropsList[(props.obj.cropname).toString()]}
         style={styles.ImagePic}
       />
       <View style={styles.ContactDetails}>

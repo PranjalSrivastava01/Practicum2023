@@ -56,7 +56,7 @@ const MarketScreen = () => {
         <FlatList
             data={cropList}
             renderItem={(crop) => {
-                return <MarketComponent obj = {crop.item}/>
+                return <MarketComponent obj = {crop.item} imageLink = {`../assets/crops/${crop.item.name}.jpg`}/>
             }}
         />
         {/* <ScrollView style={{backgroundColor:'#EFFFF8'}}>
